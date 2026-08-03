@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HarmoniaLab - Teoria Musical & Piano Interativo</title>
+    <title>Blog do Músico - Dicas & Harmonia</title>
     <style>
         :root {
             --bg-dark: #0f172a;
@@ -14,573 +14,26 @@
             --accent: #f43f5e;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --white: #ffffff;
-            --black-key: #090d16;
             --border: #475569;
+            --key-white: #f8fafc;
+            --key-black: #0f172a;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
             background-color: var(--bg-dark);
             color: var(--text-main);
             line-height: 1.6;
-            padding-bottom: 260px; /* Espaço para o piano fixo no rodapé */
+            padding-bottom: 220px; /* Espaço para o piano fixo no rodapé */
         }
 
-        header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            color: var(--text-main);
-            text-align: center;
-            padding: 2.5rem 1rem;
-            border-bottom: 1px solid var(--border);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-            letter-spacing: 1px;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-            display: grid;
-            grid-template-columns: 1fr 340px;
-            gap: 2rem;
-        }
-
-        @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .section-block {
-            background: var(--surface-dark);
-            border-radius: 12px;
-            padding: 1.8rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .section-title {
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.2rem;
-            font-size: 1.5rem;
-        }
-
-        .content-text p {
-            margin-bottom: 1rem;
-            color: var(--text-main);
-        }
-
-        .content-text ul {
-            margin-left: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .content-text li {
-            margin-bottom: 0.5rem;
-        }
-
-        .highlight-box {
-            background: var(--surface-card);
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 4px solid var(--secondary);
-            margin: 1rem 0;
-        }
-
-        /* Card Widgets Sidebar */
-        .card-widget {
-            background: var(--surface-dark);
-            border-radius: 12px;
-            padding: 1.4rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .card-widget h4 {
-            color: var(--primary);
-            margin-bottom: 0.8rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.4rem;
-        }
-
-        .glossary-list {
-            list-style: none;
-        }
-
-        .glossary-list li {
-            margin-bottom: 0.8rem;
-            font-size: 0.95rem;
-        }
-
-        /* Interface do Piano Virtual Fixo */
-        .piano-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #020617;
-            padding: 15px 10px;
-            border-top: 2px solid var(--primary);
-            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.8);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .piano-controls {
-            margin-bottom: 10px;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            text-align: center;
-        }
-
-        .piano-housing {
-            position: relative;
-            display: flex;
-            height: 180px;
-            background: #000;
-            padding: 6px;
-            border-radius: 8px;
-            overflow-x: auto;
-            max-width: 100%;
-        }
-
-        .key {
-            cursor: pointer;
-            user-select: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: center;
-            padding-bottom: 8px;
-            font-weight: bold;
-            transition: background 0.1s, transform 0.05s;
-        }
-
-        .key:active {
-            transform: translateY(2px);
-        }
-
-        .white-key {
-            width: 36px;
-            height: 100%;
-            background: #e2e8f0;
-            border: 1px solid #94a3b8;
-            border-radius: 0 0 4px 4px;
-            color: #0f172a;
-            z-index: 1;
-            font-size: 0.75rem;
-        }
-
-        .white-key.active {
-            background: var(--primary);
-            color: #fff;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);
-        }
-
-        .black-key {
-            width: 24px;
-            height: 60%;
-            background: var(--black-key);
-            color: var(--text-main);
-            position: relative;
-            margin-left: -12px;
-            margin-right: -12px;
-            z-index: 2;
-            border-radius: 0 0 3px 3px;
-            border: 1px solid #334155;
-            font-size: 0.65rem;
-        }
-
-        .black-key.active {
-            background: var(--accent);
-        }
-
-        .hint {
-            font-size: 0.7rem;
-            color: #64748b;
-            margin-top: 2px;
-            display: block;
-        }
-
-        .white-key.active .hint {
-            color: #e2e8f0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-            background: var(--surface-card);
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 15px 0;
-            color: var(--text-main);
-        }
-
-        th {
-            background-color: var(--primary);
-            color: #0f172a;
-            padding: 10px;
-        }
-
-        td {
-            padding: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>HarmoniaLab</h1>
-        <p>Aprenda Teoria Musical Avançada e Pratique no Teclado Interativo de 3 Oitavas</p>
-    </header>
-
-    <div class="container">
-        <!-- Conteúdo Principal -->
-        <main class="main-content">
-            
-            <!-- SEÇÃO 1: NOTAS E INTERVALOS -->
-            <section id="notas" class="section-block">
-                <h2 class="section-title">1. Notas e Intervalos Musical</h2>
-                <div class="content-text">
-                    <p>A música ocidental é fundamentada no sistema temperado, composto por <strong>12 notas</strong> divididas em semitons (meio-tom). As notas naturais são <strong>Dó, Ré, Mi, Fá, Sol, Lá, Si</strong>, e as alterações são indicadas por sustenidos (#) ou bemois (b).</p>
-                    
-                    <div class="highlight-box">
-                        <strong>O que é um Intervalo?</strong>
-                        <p>É a distância de altura entre dois sons. Os intervalos definem a sonoridade de acordes e melodias:</p>
-                        <ul>
-                            <li><strong>Segunda Menor (1 semitom):</strong> Tensão forte e dissonância.</li>
-                            <li><strong>Terça Maior (4 semitons) / Terça Menor (3 semitons):</strong> Define a cor do acorde (Alegre / Melancólico).</li>
-                            <li><strong>Quinta Justa (7 semitons):</strong> Estrutura de estabilidade e força.</li>
-                            <li><strong>Trítono (6 semitons):</strong> O intervalo de maior tensão na música ocidental.</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SEÇÃO 2: RITMO E TEMPO -->
-            <section id="ritmo" class="section-block">
-                <h2 class="section-title">2. Ritmo, Tempo e Compassos</h2>
-                <div class="content-text">
-                    <p>O ritmo organiza os sons na dimensão do tempo. As estruturas essenciais incluem:</p>
-                    <ul>
-                        <li><strong>Pulso (BPM):</strong> As Batidas Por Minuto determinam o andamento da música.</li>
-                        <li><strong>Fórmula de Compasso:</strong> Indica a divisão dos pulsos. Exemplos:
-                            <ul>
-                                <li><strong>4/4 (Quaternário):</strong> Base do Pop, Rock e EDM.</li>
-                                <li><strong>3/4 (Ternário):</strong> Utilizado em Valsas.</li>
-                                <li><strong>6/8 (Composto):</strong> Comum no Blues, Bossa Nova e Baladas.</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </section>
-
-            <!-- SEÇÃO 3: CAMPOS HARMÔNICOS -->
-            <section id="campo-harmonico" class="section-block">
-                <h2 class="section-title">3. Campo Harmônico e Funções Tonais</h2>
-                <div class="content-text">
-                    <p>O <strong>Campo Harmônico</strong> é a família de acordes gerada a partir das notas de uma escala. Abaixo está a regra de formação para qualquer escala maior diatônica:</p>
-                    
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>I Grau</th>
-                                    <th>ii Grau</th>
-                                    <th>iii Grau</th>
-                                    <th>IV Grau</th>
-                                    <th>V Grau</th>
-                                    <th>vi Grau</th>
-                                    <th>vii° Grau</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Maior</strong></td>
-                                    <td>Menor</td>
-                                    <td>Menor</td>
-                                    <td><strong>Maior</strong></td>
-                                    <td><strong>Maior</strong></td>
-                                    <td>Menor</td>
-                                    <td>Diminuto</td>
-                                </tr>
-                                <tr>
-                                    <td>Tônica</td>
-                                    <td>SuperTônica</td>
-                                    <td>Mediante</td>
-                                    <td>Subdominante</td>
-                                    <td>Dominante</td>
-                                    <td>Relativo Menor</td>
-                                    <td>Sensível</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <p>As **Funções Tonais** geram a sensação de movimento na música:</p>
-                    <ul>
-                        <li><strong>Tônica (I, vi):</strong> Estabilidade, descanso e resolução.</li>
-                        <li><strong>Subdominante (IV, ii):</strong> Sensação de preparação, movimento e transição.</li>
-                        <li><strong>Dominante (V, vii°):</strong> Máxima tensão; atrai fortemente a resolução de volta para a Tônica.</li>
-                    </ul>
-                </div>
-            </section>
-
-            <!-- SEÇÃO 4: TETRADES E EXTENSÕES -->
-            <section id="tetrades" class="section-block">
-                <h2 class="section-title">4. Tétrades, Inversões e Extensões</h2>
-                <div class="content-text">
-                    <p>Ao adicionar a 7ª nota em cima de uma tríade, criamos uma <strong>Tétrade</strong>. Adicionar a 9ª, 11ª ou 13ª expande o acorde com "extensões de tom":</p>
-                    
-                    <div class="highlight-box">
-                        <p><strong>Inversões de Acordes:</strong> Reorganizar as notas para que a fundamental não esteja no baixo cria transições mais suaves entre acordes (condução de vozes).</p>
-                        <ul>
-                            <li><strong>Estado Fundamental:</strong> Dó - Mi - Sol (C no baixo)</li>
-                            <li><strong>1ª Inversão:</strong> Mi - Sol - Dó (E no baixo)</li>
-                            <li><strong>2ª Inversão:</strong> Sol - Dó - Mi (G no baixo)</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-        </main>
-
-        <!-- Barra Lateral -->
-        <aside class="sidebar">
-            <div class="card-widget">
-                <h4>Guia de Atalhos</h4>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">
-                    As teclas do seu computador cobrem as 3 oitavas:<br><br>
-                    <strong>Oitava 1:</strong> Z até M<br>
-                    <strong>Oitava 2:</strong> A até K<br>
-                    <strong>Oitava 3:</strong> Q até I
-                </p>
-            </div>
-
-            <div class="card-widget">
-                <h4>Progressões Famosas</h4>
-                <ul class="glossary-list">
-                    <li><strong>I - V - vi - IV:</strong> O padrão do Pop (Ex: C - G - Am - F)</li>
-                    <li><strong>ii - V - I:</strong> A cadência clássica do Jazz (Ex: Dm - G - C)</li>
-                    <li><strong>I - IV - V:</strong> Base do Rock e Blues clássico</li>
-                    <li><strong>vi - IV - I - V:</strong> Progressão emotiva/épica</li>
-                </ul>
-            </div>
-
-            <div class="card-widget">
-                <h4>Dicas para Composição</h4>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">
-                    1. Comece criando uma melodia sobre os acordes do grau I, IV e V.<br><br>
-                    2. Use notas de passagem entre os saltos de tom para deixar a melodia mais fluida.<br><br>
-                    3. Mude a dinâmica (volume) para gerar emoção na execução.
-                </p>
-            </div>
-
-            <div class="card-widget">
-                <h4>Modos Gregos</h4>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">
-                    • <strong>Jônio:</strong> Brilhante (Escala Maior)<br>
-                    • <strong>Dórico:</strong> Jazzístico/Sombrio<br>
-                    • <strong>Frígio:</strong> Espanhol/Flamenco<br>
-                    • <strong>Lídio:</strong> Místico/Espacial<br>
-                    • <strong>Mixolídio:</strong> Bluesy/Festivo<br>
-                    • <strong>Eólio:</strong> Dramático (Escala Menor)<br>
-                    • <strong>Lócrio:</strong> Instável/Tensão pura
-                </p>
-            </div>
-        </aside>
-    </div>
-
-    <!-- Interface do Piano Virtual de 3 Oitavas -->
-    <div class="piano-container">
-        <div class="piano-controls">
-            Teclado Interativo de 3 Oitavas (C3 a B5) | Clique nas teclas ou use o teclado do computador
-        </div>
-        <div class="piano-housing" id="piano">
-            <!-- Gerado via JavaScript para garantir precisão -->
-        </div>
-    </div>
-
-    <!-- Lógica de Áudio e Interatividade -->
-    <script>
-        let audioCtx = null;
-
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-        }
-
-        function playNote(freq) {
-            initAudio();
-            
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-
-            osc.type = 'triangle'; // Som mais suave que 'sine' para piano sintético
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-            // Envelope de Áudio (ADSR simplificado)
-            gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.5);
-
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-
-            osc.start();
-            osc.stop(audioCtx.currentTime + 1.5);
-        }
-
-        // Estrutura das 3 Oitavas (C3 a B5)
-        const notesData = [
-            // Oitava 1 (C3 - B3) -> Teclas do Teclado: Linha do Z ao M
-            { note: 'C3', freq: 130.81, key: 'z', isBlack: false },
-            { note: 'C#3', freq: 138.59, key: 's', isBlack: true },
-            { note: 'D3', freq: 146.83, key: 'x', isBlack: false },
-            { note: 'D#3', freq: 155.56, key: 'd', isBlack: true },
-            { note: 'E3', freq: 164.81, key: 'c', isBlack: false },
-            { note: 'F3', freq: 174.61, key: 'v', isBlack: false },
-            { note: 'F#3', freq: 185.00, key: 'g', isBlack: true },
-            { note: 'G3', freq: 196.00, key: 'b', isBlack: false },
-            { note: 'G#3', freq: 207.65, key: 'h', isBlack: true },
-            { note: 'A3', freq: 220.00, key: 'n', isBlack: false },
-            { note: 'A#3', freq: 233.08, key: 'j', isBlack: true },
-            { note: 'B3', freq: 246.94, key: 'm', isBlack: false },
-
-            // Oitava 2 (C4 - B4) -> Teclas do Teclado: Linha do A ao K
-            { note: 'C4', freq: 261.63, key: 'a', isBlack: false },
-            { note: 'C#4', freq: 277.18, key: 'w', isBlack: true },
-            { note: 'D4', freq: 293.66, key: 's', isBlack: false },
-            { note: 'D#4', freq: 311.13, key: 'e', isBlack: true },
-            { note: 'E4', freq: 329.63, key: 'd', isBlack: false },
-            { note: 'F4', freq: 349.23, key: 'f', isBlack: false },
-            { note: 'F#4', freq: 369.99, key: 't', isBlack: true },
-            { note: 'G4', freq: 392.00, key: 'g', isBlack: false },
-            { note: 'G#4', freq: 415.30, key: 'y', isBlack: true },
-            { note: 'A4', freq: 440.00, key: 'h', isBlack: false },
-            { note: 'A#4', freq: 466.16, key: 'u', isBlack: true },
-            { note: 'B4', freq: 493.88, key: 'j', isBlack: false },
-
-            // Oitava 3 (C5 - B5) -> Teclas do Teclado: Linha do Q ao I
-            { note: 'C5', freq: 523.25, key: 'q', isBlack: false },
-            { note: 'C#5', freq: 554.37, key: '2', isBlack: true },
-            { note: 'D5', freq: 587.33, key: 'r', isBlack: false },
-            { note: 'D#5', freq: 622.25, key: '3', isBlack: true },
-            { note: 'E5', freq: 659.25, key: 't', isBlack: false },
-            { note: 'F5', freq: 698.46, key: 'y', isBlack: false },
-            { note: 'F#5', freq: 739.99, key: '5', isBlack: true },
-            { note: 'G5', freq: 783.99, key: 'u', isBlack: false },
-            { note: 'G#5', freq: 830.61, key: '6', isBlack: true },
-            { note: 'A5', freq: 880.00, key: 'i', isBlack: false },
-            { note: 'A#5', freq: 932.33, key: '7', isBlack: true },
-            { note: 'B5', freq: 987.77, key: 'o', isBlack: false }
-        ];
-
-        const keyMap = {};
-        const pianoHousing = document.getElementById('piano');
-
-        // Renderização Dinâmica das Teclas do Piano
-        notesData.forEach(item => {
-            const keyEl = document.createElement('div');
-            keyEl.className = `key ${item.isBlack ? 'black-key' : 'white-key'}`;
-            keyEl.setAttribute('data-freq', item.freq);
-            keyEl.id = `note-${item.note}`;
-            
-            keyEl.innerHTML = `
-                <span>${item.note}</span>
-                <span class="hint">${item.key ? item.key.toUpperCase() : ''}</span>
-            `;
-
-            if (item.key) {
-                keyMap[item.key.toLowerCase()] = keyEl;
-            }
-
-            keyEl.addEventListener('click', () => {
-                triggerKey(keyEl, item.freq);
-            });
-
-            pianoHousing.appendChild(keyEl);
-        });
-
-        function triggerKey(element, freq) {
-            playNote(freq);
-            element.classList.add('active');
-            setTimeout(() => element.classList.remove('active'), 200);
-        }
-
-        // Mapeamento de Eventos do Teclado do Computador
-        window.addEventListener('keydown', (e) => {
-            if (e.repeat) return;
-            const keyChar = e.key.toLowerCase();
-            const targetEl = keyMap[keyChar];
-
-            if (targetEl) {
-                const freq = parseFloat(targetEl.getAttribute('data-freq'));
-                triggerKey(targetEl, freq);
-            }
-        });
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HarmoniaLab - Curso Completo de Teoria Musical</title>
-    <style>
-        :root {
-            --bg-dark: #0f172a;
-            --surface-dark: #1e293b;
-            --surface-card: #334155;
-            --primary: #38bdf8;
-            --secondary: #818cf8;
-            --accent: #f43f5e;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #475569;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            line-height: 1.7;
-            padding-bottom: 5rem;
-        }
-
+        /* HEADER & HERO */
         header {
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
             text-align: center;
@@ -596,405 +49,397 @@
 
         header p {
             color: var(--text-muted);
-            font-size: 1.2rem;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 2.5rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .module {
-            background: var(--surface-dark);
-            border-radius: 12px;
-            padding: 2.5rem;
-            margin-bottom: 2.5rem;
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-
-        .module-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 0.8rem;
-            margin-bottom: 1.8rem;
-        }
-
-        .module-number {
-            background: var(--primary);
-            color: #0f172a;
-            font-weight: bold;
-            padding: 0.3rem 0.8rem;
-            border-radius: 6px;
             font-size: 1.1rem;
         }
 
-        .module-title {
-            color: var(--primary);
-            font-size: 1.8rem;
+        /* LAYOUT DO BLOG */
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
         }
 
-        .badge-level {
-            margin-left: auto;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            padding: 4px 10px;
-            border-radius: 20px;
+        @media (max-width: 850px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* POSTS */
+        .post {
+            background: var(--surface-dark);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .post-tag {
+            background: var(--primary);
+            color: #0f172a;
+            font-size: 0.75rem;
             font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 0.8rem;
         }
 
-        .basic { background: #10b981; color: #fff; }
-        .inter { background: #f59e0b; color: #fff; }
-        .advanced { background: var(--accent); color: #fff; }
-
-        h3 {
-            color: var(--secondary);
-            margin: 1.5rem 0 0.8rem 0;
-            font-size: 1.3rem;
-        }
-
-        p {
-            margin-bottom: 1.2rem;
+        .post h2 {
             color: var(--text-main);
-            font-size: 1rem;
-        }
-
-        ul, ol {
-            margin-left: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        li {
+            font-size: 1.6rem;
             margin-bottom: 0.5rem;
         }
 
-        .highlight-box {
+        .post-date {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .chord-box {
             background: var(--surface-card);
-            padding: 1.2rem;
-            border-radius: 8px;
-            border-left: 5px solid var(--secondary);
-            margin: 1.5rem 0;
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            background: var(--surface-card);
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 1.5rem 0;
+        .chord-box strong {
+            color: var(--primary);
         }
 
-        th {
-            background-color: var(--primary);
-            color: #0f172a;
-            padding: 12px;
-            font-weight: bold;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        code {
+        .chord-notes {
             background: #020617;
             color: var(--primary);
             padding: 2px 6px;
             border-radius: 4px;
             font-family: monospace;
+            font-weight: bold;
+        }
+
+        /* SIDEBAR (SOBRE E DICAS RÁPIDAS) */
+        .sidebar-widget {
+            background: var(--surface-dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .sidebar-widget h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-widget ul {
+            list-style: none;
+        }
+
+        .sidebar-widget li {
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .sidebar-widget li strong {
+            color: var(--text-main);
+        }
+
+        /* PIANO VIRTUAL FIXO NO RODAPÉ */
+        .piano-wrapper {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #020617;
+            padding: 10px 15px 15px 15px;
+            border-top: 2px solid var(--primary);
+            box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .piano-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .current-note-display {
+            background: var(--surface-dark);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .piano-keys {
+            display: flex;
+            position: relative;
+            height: 120px;
+            background: #000;
+            padding: 3px;
+            border-radius: 6px;
+        }
+
+        .key {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            transition: background 0.1s;
+        }
+
+        .key.white {
+            width: 36px;
+            height: 100%;
+            background: var(--key-white);
+            color: #0f172a;
+            border: 1px solid #94a3b8;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+
+        .key.white.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .key.black {
+            width: 22px;
+            height: 60%;
+            background: var(--key-black);
+            color: #fff;
+            position: relative;
+            margin-left: -11px;
+            margin-right: -11px;
+            z-index: 2;
+            border-radius: 0 0 3px 3px;
+            border: 1px solid var(--border);
+            font-size: 0.65rem;
+        }
+
+        .key.black.active {
+            background: var(--accent);
+        }
+
+        .key-hint {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 2px;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>HarmoniaLab: Apostila Fundamental e Avançada</h1>
-        <p>Da Propriedade do Som à Harmonia Funcional e Reharmonização</p>
+        <h1>Blog do Músico</h1>
+        <p>Segredos de Harmonia, Progresões de Acordes & Prática em Tempo Real</p>
     </header>
 
     <div class="container">
+        
+        <!-- FEED DE POSTAGENS -->
+        <main class="feed">
 
-        <!-- MÓDULO 1: BÁSICO -->
-        <section class="module">
-            <div class="module-header">
-                <span class="module-number">01</span>
-                <h2 class="module-title">As Propriedades Físicas do Som</h2>
-                <span class="badge-level basic">Básico</span>
+            <!-- POST 1 -->
+            <article class="post">
+                <span class="post-tag">Harmonia Avançada</span>
+                <h2>Acordes Neo-Soul: Como Usar Tétrades e Nona</h2>
+                <div class="post-date">Postado hoje por Meu Canal Musical</div>
+                <div class="post-content">
+                    <p>Se você quer dar aquele som aveludado e moderno de Jazz/Neo-Soul para as suas músicas, o segredo é abandonar as tríades simples (apenas 3 notas) e começar a usar <strong>Sétimas Maiores</strong> e <strong>Nonas</strong>.</p>
+                    
+                    <div class="chord-box">
+                        <strong>Dica Prática no Teclado:</strong>
+                        <p>Em vez de tocar Dó Maior simples (C), experimente o <strong>Cmaj9 (Dó com 7ª Maior e 9ª)</strong>.</p>
+                        <p>Notas para testar no piano: <span class="chord-notes">C - E - G - B - D</span></p>
+                    </div>
+
+                    <p><strong>Minha dica de ouro:</strong> Toque a nota C bem grave na mão esquerda e faça o acorde de E menor (E - G - B - D) na mão direita. Você terá instantaneamente o som de Cmaj9 sem complicação!</p>
+                </div>
+            </article>
+
+            <!-- POST 2 -->
+            <article class="post">
+                <span class="post-tag">Composição Pop</span>
+                <h2>A Cadência Emocional Mais Usada no Mundo</h2>
+                <div class="post-date">Postado esta semana</div>
+                <div class="post-content">
+                    <p>Você sabia que centenas de hits internacionais usam exatamente a mesma progressão de acordes? Trata-se da famosa cadência <strong>I - V - vi - IV</strong>.</p>
+                    
+                    <div class="chord-box">
+                        <strong>Testando em Dó Maior (C):</strong>
+                        <p>1. <strong>C (I):</strong> <span class="chord-notes">C - E - G</span> (Sensação de Casa)</p>
+                        <p>2. <strong>G (V):</strong> <span class="chord-notes">G - B - D</span> (Movimento e Tensão)</p>
+                        <p>3. <strong>Am (vi):</strong> <span class="chord-notes">A - C - E</span> (Toque Melancólico)</p>
+                        <p>4. <strong>F (IV):</strong> <span class="chord-notes">F - A - C</span> (Abertura e Retorno)</p>
+                    </div>
+
+                    <p>Experimente tocar esses acordes em sequência no piano abaixo mantendo um ritmo constante de 4 tempos para cada um.</p>
+                </div>
+            </article>
+
+            <!-- POST 3 -->
+            <article class="post">
+                <span class="post-tag">Dicas de Estudo</span>
+                <h2>Como Conduzir Vozes Suavemente (Voice Leading)</h2>
+                <div class="post-date">Postado esta semana</div>
+                <div class="post-content">
+                    <p>O maior erro dos iniciantes é "dar saltos" com a mão inteira pelo teclado na hora de mudar de acorde. A verdadeira maestria está em mover o mínimo possível de dedos!</p>
+                    <p><strong>Exemplo:</strong> Para ir de <strong>C (Dó)</strong> para <strong>F (Fá)</strong>, você não precisa pular a mão inteira para longe. Mantenha a nota <strong>C</strong> (que é comum aos dois acordes) presa e mova apenas as outras notas para os lados!</p>
+                </div>
+            </article>
+
+        </main>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3>Sobre o Blog</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">
+                    Seja bem-vindo! Este é o meu espaço para compartilhar sacadas de arranjo, truques de composição e teoria descomplicada para teclado e piano.
+                </p>
             </div>
-            <p>Antes de entender a música como arte, é necessário compreendê-la como fenômeno físico. A música é o som organizado no tempo, e todo som possui quatro propriedades fundamentais:</p>
-            
-            <h3>1. Altura (Frequência)</h3>
-            <p>A altura é a propriedade que nos permite diferenciar sons <strong>graves</strong> (baixos) de sons <strong>agudos</strong> (altos). Ela é determinada pela frequência de vibração das ondas sonoras, medida em Hertz (Hz):</p>
-            <ul>
-                <li><strong>Frequências Baixas (ex: 60 Hz):</strong> Produzem sons graves (ex: contra-baixo, tuba).</li>
-                <li><strong>Frequências Altas (ex: 4000 Hz):</strong> Produzem sons agudos (ex: flautim, pratos da bateria).</li>
-            </ul>
 
-            <h3>2. Duração</h3>
-            <p>Refere-se ao tempo em que o som permanece sendo emitido. Na escrita musical, a duração é representada pelas figuras rítmicas (semibreve, mínima, semínima, colcheia, etc.).</p>
-
-            <h3>3. Intensidade (Volume)</h3>
-            <p>É a força com que a onda sonora vibra. Na música, chamamos isso de dinâmica musical (ex: <em>Piano</em>, <em>Forte</em>, <em>Crescendo</em>).</p>
-
-            <h3>4. Timbre (A "Cor" do Som)</h3>
-            <p>É a característica particular que nos permite diferenciar a origem do som, mesmo quando duas fontes tocam a mesma nota com a mesma altura e duração. O timbre é definido pelos harmônicos que acompanham a frequência fundamental.</p>
-        </section>
-
-        <!-- MÓDULO 2: BÁSICO -->
-        <section class="module">
-            <div class="module-header">
-                <span class="module-number">02</span>
-                <h2 class="module-title">Notas, Semitons e Notação</h2>
-                <span class="badge-level basic">Básico</span>
+            <div class="sidebar-widget">
+                <h3>Dicas Rápidas</h3>
+                <ul>
+                    <li><strong>1. Trítono:</strong> É o intervalo tenso que faz o acorde dominante querer "resolver".</li>
+                    <li><strong>2. Acorde Sus4:</strong> Troque a terça pela quarta para criar suspense antes do refrão.</li>
+                    <li><strong>3. Mão Esquerda:</strong> Toque em oitavas no grave para dar peso e preenchimento ao som.</li>
+                </ul>
             </div>
-            <p>O sistema musical ocidental utiliza um conjunto de 12 notas divididas em intervalos de meio-tom (semitom).</p>
-
-            <h3>Notas Naturais e Alterações</h3>
-            <p>As 7 notas naturais são: <strong>Dó, Ré, Mi, Fá, Sol, Lá, Si</strong> (em notação alfabética: <code>C, D, E, F, G, A, B</code>).</p>
-            <p>Para acessar as 5 notas restantes dentro da oitava, utilizamos os acidentes musicais:</p>
-            <ul>
-                <li><strong>Sustenido (#):</strong> Eleva a nota em 1 semitom.</li>
-                <li><strong>Bemol (b):</strong> Abaixa a nota em 1 semitom.</li>
-                <li><strong>Bequadro (&natural;):</strong> Anula o efeito do sustenido ou bemol, retornando a nota ao seu estado natural.</li>
-            </ul>
-
-            <div class="highlight-box">
-                <strong>O que é Enarmonia?</strong>
-                <p>Enarmonia ocorre quando duas notas possuem nomes diferentes, mas emitem exatamente o mesmo som. Exemplo: <code>C#</code> e <code>Db</code> são notas enarmônicas.</p>
-            </div>
-        </section>
-
-        <!-- MÓDULO 3: BÁSICO -->
-        <section class="module">
-            <div class="module-header">
-                <span class="module-number">03</span>
-                <h2 class="module-title">Ritmo, Métrica e Compassos</h2>
-                <span class="badge-level basic">Básico</span>
-            </div>
-            <p>O ritmo organiza o tempo da música através da divisão de pulsos e acentos métricos.</p>
-
-            <h3>Fórmulas de Compasso</h3>
-            <p>A fórmula de compasso é representada por dois números sobrepostos no início da pauta:</p>
-            <ul>
-                <li><strong>Número Superior (Numerador):</strong> Indica a quantidade de tempos em cada compasso.</li>
-                <li><strong>Número Inferior (Denominador):</strong> Indica qual figura rítmica vale 1 tempo inteiro.</li>
-            </ul>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tipo de Compasso</th>
-                        <th>Fórmula</th>
-                        <th>Sensação / Aplicação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Binário Simples</td>
-                        <td>2/4</td>
-                        <td>Marchas, Frevo, Polca (Forte - Fraco)</td>
-                    </tr>
-                    <tr>
-                        <td>Ternário Simples</td>
-                        <td>3/4</td>
-                        <td>Valsas, Guarânia (Forte - Fraco - Fraco)</td>
-                    </tr>
-                    <tr>
-                        <td>Quaternário Simples</td>
-                        <td>4/4</td>
-                        <td>Pop, Rock, Jazz, Eletrônica (Forte - Fraco - M.Forte - Fraco)</td>
-                    </tr>
-                    <tr>
-                        <td>Composto</td>
-                        <td>6/8</td>
-                        <td>Blues, Baladas, Bossa Nova (Divisão ternária do tempo)</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- MÓDULO 4: INTERMEDIÁRIO -->
-        <section class="module">
-            <div class="module-header">
-                <span class="module-number">04</span>
-                <h2 class="module-title">Teoria dos Intervalos Musical</h2>
-                <span class="badge-level inter">Intermediário</span>
-            </div>
-            <p>Um intervalo é a distância medida entre duas notas. Eles dividem-se em quantitativos (distância de nomes) e qualitativos (medida exata de semitons).</p>
-
-            <h3>Classificação Qualitativa dos Intervalos</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Intervalo</th>
-                        <th>Distância em Semitons</th>
-                        <th>Exemplo a partir de C</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>2ª Menor</td><td>1 Semitom</td><td>C -> Db</td></tr>
-                    <tr><td>2ª Maior</td><td>2 Semitons (1 Tom)</td><td>C -> D</td></tr>
-                    <tr><td>3ª Menor</td><td>3 Semitons</td><td>C -> Eb</td></tr>
-                    <tr><td>3ª Maior</td><td>4 Semitons (2 Tons)</td><td>C -> E</td></tr>
-                    <tr><td>4ª Justa</td><td>5 Semitons</td><td>C -> F</td></tr>
-                    <tr><td>4ª Aumentada / 5ª Diminuta</td><td>6 Semitons (Trítono)</td><td>C -> F# / C -> Gb</td></tr>
-                    <tr><td>5ª Justa</td><td>7 Semitons</td><td>C -> G</td></tr>
-                    <tr><td>6ª Menor</td><td>8 Semitons</td><td>C -> Ab</td></tr>
-                    <tr><td>6ª Maior</td><td>9 Semitons</td><td>C -> A</td></tr>
-                    <tr><td>7ª Menor</td><td>10 Semitons</td><td>C -> Bb</td></tr>
-                    <tr><td>7ª Maior</td><td>11 Semitons</td><td>C -> B</td></tr>
-                    <tr><td>8ª Justa</td><td>12 Semitons (1 Oitava)</td><td>C -> C</td></tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- MÓDULO 5: INTERMEDIÁRIO -->
-        <section class="module">
-            <div class="module-header">
-                <span class="module-number">05</span>
-                <h2 class="module-title">Formação de Escalas Diatônicas</h2>
-                <span class="badge-level inter">Intermediário</span>
-            </div>
-            <p>Uma escala é uma sequência ordenada de notas dentro de uma oitava. As duas principais estruturas no sistema diatônico são a Escala Maior e a Escala Menor.</p>
-
-            <h3>Fórmula da Escala Maior</h3>
-            <p>A estrutura intervalar fixa para qualquer escala maior é:</p>
-            <div class="highlight-box">
-                <code>Tom - Tom - Semitom - Tom - Tom - Tom - Semitom</code> (T - T - ST - T - T - T - ST)
-            </div>
-            <p><strong>Exemplo em C Maior:</strong> C - D - E - F - G - A - B - C</p>
-            <p><strong>Exemplo em G Maior:</strong> G - A - B - C - D - E - F# - G</p>
-
-            <h3>Fórmula da Escala Menor Natural (Relativa)</h3>
-            <div class="highlight-box">
-                <code>Tom - Semitom - Tom - Tom - Semitom - Tom - Tom</code> (T - ST - T - T - ST - T - T)
-            </div>
-            <p><strong>Exemplo em A Menor Natural:</strong> A - B - C - D - E - F - G - A</p>
-        </section>
-
-        <!-- MÓDULO 6: INTERMEDIÁRIO -->
-        <section class="module">
-            <div class="module-header">
-                <span class="module-number">06</span>
-                <h2 class="module-title">Tríades e Tétrades (Formação de Acordes)</h2>
-                <span class="badge-level inter">Intermediário</span>
-            </div>
-            <p>Acordes são construídos sobrepondo intervalos de terças a partir de uma nota base (Fundamental).</p>
-
-            <h3>As 4 Tríades Básicas</h3>
-            <ul>
-                <li><strong>Tríade Maior:</strong> Fundamental + Terça Maior + Quinta Justa (ex: C - E - G)</li>
-                <li><strong>Tríade Menor:</strong> Fundamental + Terça Menor + Quinta Justa (ex: C - Eb - G)</li>
-                <li><strong>Tríade Diminuta:</strong> Fundamental + Terça Menor + Quinta Diminuta (ex: C - Eb - Gb)</li>
-                <li><strong>Tríade Aumentada:</strong> Fundamental + Terça Maior + Quinta Aumentada (ex: C - E - G#)</li>
-            </ul>
-
-            <h3>Tétrades (Acordes de 7ª)</h3>
-            <p>A adição da 7ª nota expande a riqueza harmônica do acorde:</p>
-            <ul>
-                <li><strong>Sétima Maior (7M / maj7):</strong> Fundamental + 3ªM + 5ªJ + 7ªM (Cmaj7)</li>
-                <li><strong>Sétima Dominante (7):</strong> Fundamental + 3ªM + 5ªJ + 7ªm (C7)</li>
-                <li><strong>Menor com Sétima (m7):</strong> Fundamental + 3ªm + 5ªJ + 7ªm (Cm7)</li>
-                <li><strong>Meio-Diminuto (m7b5):</strong> Fundamental + 3ªm + 5ªd + 7ªm (Cm7b5)</li>
-            </ul>
-        </section>
-
-        <!-- MÓDULO 7: AVANÇADO -->
-        <section class="module">
-            <div class="module-header">
-                <span class="module-number">07</span>
-                <h2 class="module-title">O Campo Harmônico e Funções Tonais</h2>
-                <span class="badge-level advanced">Avançado</span>
-            </div>
-            <p>O Campo Harmônico é a família de acordes gerada ao construir tríades e tétrades sobre cada grau de uma escala.</p>
-
-            <h3>Campo Harmônico Maior (Tétrades)</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Grau</th>
-                        <th>Acorde Tipo</th>
-                        <th>Função Harmônica</th>
-                        <th>Característica Tonal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>I</td><td>Maior com 7M (Imaj7)</td><td>Tônica</td><td>Estabilidade, repouso, resolução</td></tr>
-                    <tr><td>II</td><td>Menor com 7 (iim7)</td><td>Subdominante</td><td>Transição, preparação, movimento</td></tr>
-                    <tr><td>III</td><td>Menor com 7 (iiim7)</td><td>Tônica (Secundária)</td><td>Repouso com sonoridade suave</td></tr>
-                    <tr><td>IV</td><td>Maior com 7M (IVmaj7)</td><td>Subdominante</td><td>Afastamento da tônica, amplitude</td></tr>
-                    <tr><td>V</td><td>Dominante (V7)</td><td>Dominante</td><td>Tensão máxima (contém o trítono)</td></tr>
-                    <tr><td>VI</td><td>Menor com 7 (vim7)</td><td>Tônica (Relativo)</td><td>Repouso relativo, melancolia</td></tr>
-                    <tr><td>VII</td><td>Meio-Diminuto (viim7b5)</td><td>Dominante</td><td>Tensão e forte atração para o I grau</td></tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- MÓDULO 8: AVANÇADO -->
-        <section class="module">
-            <div class="module-header">
-                <span class="module-number">08</span>
-                <h2 class="module-title">Modos Gregos e Suas Aplicações</h2>
-                <span class="badge-level advanced">Avançado</span>
-            </div>
-            <p>Os modos gregos são rotações da escala maior. Cada modo possui uma nota característica responsável pela sua sonoridade única.</p>
-
-            <ul>
-                <li><strong>Jônio (I Grau):</strong> Escala maior natural. Nota característica: 4ª Justa.</li>
-                <li><strong>Dórico (II Grau):</strong> Modo menor. Nota característica: <strong>6ª Maior</strong> (sonoridade funk/jazz).</li>
-                <li><strong>Frígio (III Grau):</strong> Modo menor. Nota característica: <strong>2ª Menor</strong> (sonoridade espanhola/flamenca).</li>
-                <li><strong>Lídio (IV Grau):</strong> Modo maior. Nota característica: <strong>4ª Aumentada</strong> (sonoridade espacial/mística).</li>
-                <li><strong>Mixolídio (V Grau):</strong> Modo maior. Nota característica: <strong>7ª Menor</strong> (sonoridade bluesy/rock).</li>
-                <li><strong>Eólio (VI Grau):</strong> Escala menor natural. Nota característica: 6ª Menor.</li>
-                <li><strong>Lócrio (VII Grau):</strong> Modo diminuto. Nota característica: <strong>5ª Diminuta</strong> (tensão pura).</li>
-            </ul>
-        </section>
-
-        <!-- MÓDULO 9: AVANÇADO -->
-        <section class="module">
-            <div class="module-header">
-                <span class="module-number">09</span>
-                <h2 class="module-title">Empréstimo Modal e Reharmonização</h2>
-                <span class="badge-level advanced">Avançado</span>
-            </div>
-            <p>O Empréstimo Modal (E.M.) ocorre quando uma música em tom maior utiliza acordes pertencentes ao seu tom homônimo menor (ou vice-versa), enriquecendo a paleta de cores da harmonia.</p>
-
-            <h3>Acordes de Empréstimo Modal Mais Comuns em Tom Maior:</h3>
-            <ul>
-                <li><code>ivm6</code> ou <code>ivm7</code> (Subdominante menor)</li>
-                <li><code>bVImaj7</code> (Acorde dramático vindo do modo Eólio)</li>
-                <li><code>bVII7</code> (Dominante sem função de resolução direta na tônica)</li>
-                <li><code>bIIImaj7</code> (Tônica menor emprestada)</li>
-            </ul>
-        </section>
-
-        <!-- MÓDULO 10: AVANÇADO -->
-        <section class="module">
-            <div class="module-header">
-                <span class="module-number">10</span>
-                <h2 class="module-title">Dominantes Secundários e SubV</h2>
-                <span class="badge-level advanced">Avançado</span>
-            </div>
-            <p>Nem todas as frases harmônicas resolvem na tônica principal. Dominantes Secundários são acordes do tipo V7 utilizados para preparar a chegada de qualquer grau diatônico menor ou maior.</p>
-
-            <h3>Exemplo de Aplicação:</h3>
-            <p>Em vez de tocar uma sequência simples como <code>C -> Dm -> G7 -> C</code>, podemos inserir o dominante secundário do segundo grau (V7/ii):</p>
-            <div class="highlight-box">
-                <code>C -> A7 -> Dm -> G7 -> C</code>
-            </div>
-            <p>O <code>A7</code> é o Dominante Secundário que "puxa" fortemente a resolução para o <code>Dm</code>.</p>
-
-            <h3>O Acorde SubV7 (Substituto Tritonal)</h3>
-            <p>O SubV7 é um acorde dominante construído meio-tom acima do acorde de destino. Ele compartilha exatamente o mesmo trítono que o dominante principal, permitindo uma resolução cromática descendente extremamente suave.</p>
-            <p><strong>Exemplo:</strong> Substituir <code>G7 -> C</code> por <code>Db7 -> C</code>.</p>
-        </section>
+        </aside>
 
     </div>
 
+    <!-- PIANO VIRTUAL FIXO -->
+    <div class="piano-wrapper">
+        <div class="piano-header">
+            <span>🎹 <strong>Piano do Blog:</strong> Use o mouse ou as teclas do teclado do PC (Z, X, C, V...)</span>
+            <div>Nota Tocada: <span id="note-display" class="current-note-display">---</span></div>
+        </div>
+        <div class="piano-keys" id="piano"></div>
+    </div>
+
+    <script>
+        // Configuração do Áudio (Web Audio API)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(freq) {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc.type = 'triangle'; // Som suave estilo piano/synth
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.2);
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 1.2);
+        }
+
+        // Mapeamento de Notas e Teclas
+        const notes = [
+            { note: 'C3', freq: 130.81, keyChar: 'z', isBlack: false },
+            { note: 'C#3', freq: 138.59, keyChar: 's', isBlack: true },
+            { note: 'D3', freq: 146.83, keyChar: 'x', isBlack: false },
+            { note: 'D#3', freq: 155.56, keyChar: 'd', isBlack: true },
+            { note: 'E3', freq: 164.81, keyChar: 'c', isBlack: false },
+            { note: 'F3', freq: 174.61, keyChar: 'v', isBlack: false },
+            { note: 'F#3', freq: 185.00, keyChar: 'g', isBlack: true },
+            { note: 'G3', freq: 196.00, keyChar: 'b', isBlack: false },
+            { note: 'G#3', freq: 207.65, keyChar: 'h', isBlack: true },
+            { note: 'A3', freq: 220.00, keyChar: 'n', isBlack: false },
+            { note: 'A#3', freq: 233.08, keyChar: 'j', isBlack: true },
+            { note: 'B3', freq: 246.94, keyChar: 'm', isBlack: false },
+
+            { note: 'C4', freq: 261.63, keyChar: 'q', isBlack: false },
+            { note: 'C#4', freq: 277.18, keyChar: '2', isBlack: true },
+            { note: 'D4', freq: 293.66, keyChar: 'w', isBlack: false },
+            { note: 'D#4', freq: 311.13, keyChar: '3', isBlack: true },
+            { note: 'E4', freq: 329.63, keyChar: 'e', isBlack: false },
+            { note: 'F4', freq: 349.23, keyChar: 'r', isBlack: false },
+            { note: 'F#4', freq: 369.99, keyChar: '5', isBlack: true },
+            { note: 'G4', freq: 392.00, keyChar: 't', isBlack: false },
+            { note: 'G#4', freq: 415.30, keyChar: '6', isBlack: true },
+            { note: 'A4', freq: 440.00, keyChar: 'y', isBlack: false },
+            { note: 'A#4', freq: 466.16, keyChar: '7', isBlack: true },
+            { note: 'B4', freq: 493.88, keyChar: 'u', isBlack: false }
+        ];
+
+        const pianoContainer = document.getElementById('piano');
+        const display = document.getElementById('note-display');
+        const keyMap = {};
+
+        // Renderizar o Piano
+        notes.forEach(item => {
+            const keyEl = document.createElement('div');
+            keyEl.className = `key ${item.isBlack ? 'black' : 'white'}`;
+            keyEl.innerHTML = `<span>${item.note}</span><span class="key-hint">${item.keyChar.toUpperCase()}</span>`;
+            
+            keyMap[item.keyChar.toLowerCase()] = { element: keyEl, ...item };
+
+            keyEl.addEventListener('mousedown', () => triggerNote(keyEl, item.freq, item.note));
+
+            pianoContainer.appendChild(keyEl);
+        });
+
+        function triggerNote(element, freq, noteName) {
+            playSound(freq);
+            display.innerText = noteName;
+            element.classList.add('active');
+            setTimeout(() => element.classList.remove('active'), 200);
+        }
+
+        // Eventos do Teclado do Computador
+        window.addEventListener('keydown', (e) => {
+            if (e.repeat) return;
+            const key = e.key.toLowerCase();
+            if (keyMap[key]) {
+                const item = keyMap[key];
+                triggerNote(item.element, item.freq, item.note);
+            }
+        });
+    </script>
 </body>
 </html>
